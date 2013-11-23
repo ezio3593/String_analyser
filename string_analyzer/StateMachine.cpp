@@ -80,7 +80,7 @@ NumberState::NumberState()
 	sign = '-';
 	separators = ".,";
 	startPos = 0;
-
+	isGoodParse = true;
 
 	transitions = new std::map<state, Trans>();
 
@@ -142,8 +142,13 @@ unsigned int NumberState::readChar(char c, unsigned int pos, bool isLast)
 	{
 		pos = stateMachine->getPos();
 		bool isSetEnd = stateMachine->isSetEndPosition();
-		if (isSetEnd && pos - startPos >= 0) ++count;
-		if (!pos) return startPos;
+		if (isSetEnd) 
+			++count;
+		else 
+		{
+			isGoodParse = false;
+			return startPos;
+		}
 	} 
 	return isRead ? ++pos : pos;
 }
@@ -160,6 +165,7 @@ NumberState::~NumberState()
 WordState::WordState()
 {
 	type = "Word";
+	isGoodParse = true;
 
 	count = 0;
 	startPos = 0;
@@ -196,8 +202,14 @@ unsigned int WordState::readChar(char c, unsigned int pos, bool isLast)
 	if (stateMachine->isEnd()) 
 	{
 		pos = stateMachine->getPos();
-		if (pos - startPos > 0) ++count;
-		if (!pos) return startPos;
+		bool isSetEnd = stateMachine->isSetEndPosition();
+		if (isSetEnd) 
+			++count;
+		else 
+		{
+			isGoodParse = false;
+			return startPos;
+		}
 	} 
 	return isRead ? ++pos : pos;;
 }
@@ -213,6 +225,7 @@ WordState::~WordState()
 SymbolState::SymbolState()
 {
 	type = "Symbol";
+	isGoodParse = true;
 
 	count = 0;
 	startPos = 0;
@@ -242,8 +255,14 @@ unsigned int SymbolState::readChar(char c, unsigned int pos, bool isLast)
 	if (stateMachine->isEnd()) 
 	{
 		pos = stateMachine->getPos();
-		if (pos - startPos >= 0) ++count;
-		if (!pos) return startPos;
+		bool isSetEnd = stateMachine->isSetEndPosition();
+		if (isSetEnd) 
+			++count;
+		else 
+		{
+			isGoodParse = false;
+			return startPos;
+		}
 	}
 	return isRead ? ++pos : pos;
 }
@@ -259,6 +278,7 @@ SymbolState::~SymbolState()
 SpaceState::SpaceState()
 {
 	type = "Space";
+	isGoodParse = true;
 
 	count = 0;
 	startPos = 0;
@@ -288,8 +308,14 @@ unsigned int SpaceState::readChar(char c, unsigned int pos, bool isLast)
 	if (stateMachine->isEnd()) 
 	{
 		pos = stateMachine->getPos();
-		if (pos - startPos >= 0) ++count;
-		if (!pos) return startPos;
+		bool isSetEnd = stateMachine->isSetEndPosition();
+		if (isSetEnd) 
+			++count;
+		else 
+		{
+			isGoodParse = false;
+			return startPos;
+		}
 	}
 	return isRead ? ++pos : pos;
 }

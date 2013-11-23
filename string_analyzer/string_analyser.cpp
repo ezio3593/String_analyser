@@ -35,6 +35,7 @@ int main(int argc, char* argv[])
 					stringParser.Parse(&input);
 					input.clear();
 				}
+				printStat(stringParser.getStat());
 			} else
 			{
 				std::cerr << "Cannot open file: " << argv[2] << std::endl;
@@ -47,6 +48,11 @@ int main(int argc, char* argv[])
 		} else if (mode[0] == '-')
 		{
 			printIncParamsError();
+		} else 
+		{
+			input = argv[1];
+			stringParser.Parse(&input);
+			printStat(stringParser.getStat());
 		}
 	} else
 	{
@@ -55,10 +61,10 @@ int main(int argc, char* argv[])
 		std::getline(std::cin, input);
 		stringParser.Parse(&input);
 		stringParser.getStat();
+		printStat(stringParser.getStat());
+		std::cout << std::endl << "Press any key to exit" << std::endl;
+		std::cin.get();
 	}	
-
-	printStat(stringParser.getStat());
-	std::cin.get();
 	return 0;
 }
 

@@ -11,19 +11,23 @@ StateManager::StateManager()
 
 State* StateManager::getState(char c)
 {
-	int index = 0;
-	if (currentStateIndex == statesVector.size() - 1) currentStateIndex = 0;
-	for (unsigned int i = currentStateIndex; i < statesVector.size(); ++i)
+	int index = -1;
+
+	for (unsigned int i = 0; i < statesVector.size(); ++i)
 	{
 		if (statesVector[i]->isCorrectInputChar(c)) 
 		{
-			index = i;
-			break;
+			if (i == currentStateIndex && !statesVector[i]->isGood())
+				continue;
+			else 
+			{
+				index = i;
+				break;
+			}
 		}
 	}
 
-	bool ss= statesVector[index]->isGood();
-	if (index == currentStateIndex && !statesVector[index]->isGood())
+	if (index == -1)
 		return NULL;
 	else 
 	{

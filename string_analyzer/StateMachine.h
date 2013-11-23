@@ -10,11 +10,12 @@ class State
 		std::string type;
 		int count;
 		int startPos;
+		bool isGoodParse;
 	public:
 		virtual bool isEnd() = 0;
 		virtual unsigned int readChar(char, unsigned int, bool) = 0;
 		virtual void reset() = 0;
-		virtual bool isGood() = 0;
+		virtual bool isGood() {return isGoodParse;}
 		virtual bool isCorrectInputChar(char) = 0;
 		virtual void setStartPos(unsigned int pos) {startPos = pos;}
 		virtual std::string getTypeName() {return type;}
@@ -104,9 +105,8 @@ class NumberState: public State
 		NumberState();
 		unsigned int readChar(char c, unsigned int pos, bool isLast);
 		bool isCorrectInputChar(char c);
-		void reset() {stateMachine->reset();}
+		void reset() {stateMachine->reset(); isGoodParse = true;}
 		bool isEnd() {return stateMachine->isEnd();}
-		bool isGood() {return stateMachine->getPos() == 0 && !stateMachine->isSetEndPosition() ? false : true;}
 		~NumberState();
 };
 
@@ -132,8 +132,7 @@ class WordState: public State
 		unsigned int readChar(char c, unsigned int pos, bool isLast);
 		bool isCorrectInputChar(char c) {return isWordChar(c);}
 		bool isEnd() {return stateMachine->isEnd();}
-		bool isGood() {return stateMachine->getPos() == 0 && stateMachine->isSetEndPosition() ? false : true;}
-		void reset() {stateMachine->reset();}
+		void reset() {stateMachine->reset(); isGoodParse = true;}
  		~WordState();
 };
 
@@ -158,8 +157,7 @@ class SymbolState: public State
 		unsigned int readChar(char c, unsigned int pos, bool isLast);
 		bool isCorrectInputChar(char c) {return isSymbol(c);}
 		bool isEnd() {return stateMachine->isEnd();}
-		bool isGood() {return stateMachine->getPos() == 0 && stateMachine->isSetEndPosition() ? false : true;}
-		void reset() {stateMachine->reset();}
+		void reset() {stateMachine->reset(); isGoodParse = true;}
 		~SymbolState();
 };
 
@@ -184,7 +182,6 @@ class SpaceState: public State
 		unsigned int readChar(char c, unsigned int pos, bool isLast);
 		bool isCorrectInputChar(char c) {return isSpace(c);}
 		bool isEnd() {return stateMachine->isEnd();}
-		bool isGood() {return stateMachine->getPos() == 0 && stateMachine->isSetEndPosition() ? false : true;}
-		void reset() {stateMachine->reset();}
+		void reset() {stateMachine->reset(); isGoodParse = true;}
 		~SpaceState();
 };
