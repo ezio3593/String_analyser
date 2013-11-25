@@ -5,6 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include "StringParser.h"
+#include <time.h>
 
 void printHelp(const char*);
 void printIncParamsError();
@@ -29,12 +30,15 @@ int main(int argc, char* argv[])
 
 			if (!ifs.fail())
 			{
+				clock_t time = clock();
 				while (!ifs.eof()) 
 				{
 					std::getline(ifs, input);
 					stringParser.Parse(&input);
 					input.clear();
 				}
+				time = clock() - time;
+				std::cout << std::endl << std::endl << "Time: " << time << std::endl;
 				printStat(stringParser.getStat());
 			} else
 			{
@@ -88,7 +92,7 @@ void printStat(const std::map<std::string, int>* stat)
 
 	
 	const_iter it =  stat->cbegin();
-	unsigned int maxLen = it->second;
+	unsigned int maxLen = (it->first).length();
 	for (; it != stat->cend(); ++it)
 	{
 		if ((it ->first).length() > maxLen) maxLen = (it ->first).length();
